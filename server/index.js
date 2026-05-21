@@ -4,6 +4,8 @@ import cors from 'cors';
 import connectDB from './config/db.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import authRoutes from './routes/authRoutes.js';
+import testRoutes from './routes/testRoutes.js';
+import leaderboardRoutes from './routes/leaderboardRoutes.js';
 
 dotenv.config();
 
@@ -11,7 +13,10 @@ connectDB();
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: process.env.CLIENT_URL || '*',
+  credentials: true
+}));
 app.use(express.json());
 
 app.get('/', (req, res) => {
@@ -19,6 +24,8 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/tests', testRoutes);
+app.use('/api/leaderboard', leaderboardRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

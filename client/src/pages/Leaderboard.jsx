@@ -1,14 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { leaderboardService } from '../services/api';
 
 const Leaderboard = () => {
-  const dummyData = [
-    { rank: 1, username: 'TypingGod99', wpm: 145, accuracy: 99 },
-    { rank: 2, username: 'SpeedDemon', wpm: 138, accuracy: 98 },
-    { rank: 3, username: 'KeyboardNinja', wpm: 132, accuracy: 100 },
-    { rank: 4, username: 'FastFingers', wpm: 125, accuracy: 96 },
-    { rank: 5, username: 'AverageJoe', wpm: 115, accuracy: 95 },
-  ];
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    const fetchLeaderboard = async () => {
+      try {
+        const result = await leaderboardService.getGlobalLeaderboard();
+        setData(result);
+      } catch (err) {
+        setError('Failed to fetch leaderboard data.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchLeaderboard();
+  }, []);
+
+  if (loading) return <div style={{ textAlign: 'center', marginTop: '50px' }}><h2 className="neon-text">Loading leaderboard...</h2></div>;
+  if (error) return <div style={{ textAlign: 'center', marginTop: '50px', color: 'var(--error)' }}><h2>{error}</h2></div>;
 
   return (
     <div style={{ maxWidth: '800px', margin: '40px auto' }}>
@@ -20,30 +34,34 @@ const Leaderboard = () => {
             <tr style={{ borderBottom: '1px solid var(--glass-border)' }}>
               <th style={{ padding: '15px', color: 'var(--text-muted)' }}>Rank</th>
               <th style={{ padding: '15px', color: 'var(--text-muted)' }}>User</th>
-              <th style={{ padding: '15px', color: 'var(--text-muted)' }}>WPM</th>
-              <th style={{ padding: '15px', color: 'var(--text-muted)' }}>Accuracy</th>
+              <th style={{ padding: '15px', color: 'var(--text-muted)' }}>Highest WPM</th>
+              <th style={{ padding: '15px', color: 'var(--text-muted)' }}>Average WPM</th>
             </tr>
           </thead>
           <tbody>
-            {dummyData.map((user) => (
-              <motion.tr 
-                key={user.rank}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: user.rank * 0.1 }}
-                style={{ 
-                  borderBottom: '1px solid rgba(255,255,255,0.05)',
-                  background: user.rank === 1 ? 'rgba(0, 240, 255, 0.1)' : 'transparent'
-                }}
-              >
-                <td style={{ padding: '15px', fontWeight: 'bold' }}>
-                  {user.rank === 1 ? <span className="neon-text">#1</span> : `#${user.rank}`}
-                </td>
-                <td style={{ padding: '15px' }}>{user.username}</td>
-                <td style={{ padding: '15px', fontWeight: 'bold', color: 'var(--accent)' }}>{user.wpm}</td>
-                <td style={{ padding: '15px' }}>{user.accuracy}%</td>
-              </motion.tr>
-            ))}
+            {data.length === 0 ? (
+              <tr><td colSpan="4" style={{ textAlign: 'center', padding: '20px' }}>No records found.</td></tr>
+            ) : (
+              data.map((user, index) => (
+                <motion.tr 
+                  key={user._id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  style={{ 
+                    borderBottom: '1px solid rgba(255,255,255,0.05)',
+                    background: index === 0 ? 'rgba(0, 240, 255, 0.1)' : 'transparent'
+                  }}
+                >
+                  <td style={{ padding: '15px', fontWeight: 'bold' }}>
+                    {index === 0 ? <span className="neon-text">#1</span> : `#${index + 1}`}
+                  </td>
+                  <td style={{ padding: '15px' }}>{user.username}</td>
+                  <td style={{ padding: '15px', fontWeight: 'bold', color: 'var(--accent)' }}>{user.highestWPM}</td>
+                  <td style={{ padding: '15px' }}>{user.averageWPM}</td>
+                </motion.tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

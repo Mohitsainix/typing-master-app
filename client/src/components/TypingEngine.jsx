@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
+import { testService } from '../services/api';
 import './TypingEngine.css';
 
 const TEXTS = [
@@ -22,9 +23,35 @@ const TypingEngine = () => {
   }, []);
 
   useEffect(() => {
-    if (userInput.length === text.length && text.length > 0) {
-      setIsFinished(true);
-    }
+    const handleFinish = async () => {
+      if (userInput.length === text.length && text.length > 0 && !isFinished) {
+        setIsFinished(true);
+        
+        const timeElapsed = (Date.now() - startTime) / 1000; // in seconds
+        let mistakesCount = 0;
+        for (let i = 0; i < userInput.length; i++) {
+          if (userInput[i] !== text[i]) mistakesCount++;
+        }
+        
+        try {
+          const userInfo = localStorage.getItem('userInfo');
+          if (userInfo) {
+            await testService.saveScore({
+              wpm,
+              accuracy,
+              mistakes: mistakesCount,
+              mode: 'paragraph',
+              difficulty: 'medium',
+              duration: timeElapsed
+            });
+          }
+        } catch (error) {
+          console.error("Failed to save score:", error);
+        }
+      }
+    };
+    handleFinish();
+  }, [userInput, text, isFinished, startTime, wpm, accuracy]);
     
     if (userInput.length > 0 && !startTime) {
       setStartTime(Date.now());
