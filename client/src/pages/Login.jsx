@@ -96,13 +96,14 @@ const Login = () => {
         
         <p style={{ textAlign: 'center', marginTop: '20px', color: 'var(--text-muted)' }}>
           {isLogin ? "Don't have an account? " : "Already have an account? "}
-          <span 
+          <button 
+            type="button"
             className="neon-text-purple" 
-            style={{ cursor: 'pointer' }}
+            style={{ cursor: 'pointer', background: 'none', border: 'none', fontSize: '1rem', fontFamily: 'inherit', padding: 0 }}
             onClick={() => setIsLogin(!isLogin)}
           >
             {isLogin ? 'Register' : 'Login'}
-          </span>
+          </button>
         </p>
       </div>
     </motion.div>
