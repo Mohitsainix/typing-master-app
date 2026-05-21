@@ -52,7 +52,8 @@ const TypingEngine = () => {
     };
     handleFinish();
   }, [userInput, text, isFinished, startTime, wpm, accuracy]);
-    
+
+  useEffect(() => {
     if (userInput.length > 0 && !startTime) {
       setStartTime(Date.now());
     }
@@ -69,7 +70,7 @@ const TypingEngine = () => {
       }
       setAccuracy(Math.round((correctChars / userInput.length) * 100) || 100);
     }
-  }, [userInput, text, startTime]);
+  }, [userInput, startTime, text]);
 
   const handleChange = (e) => {
     if (!isFinished) {
