@@ -1,0 +1,117 @@
+:root {
+  --primary: #0a0e17; /* Deep Navy */
+  --secondary: #121a2f;
+  --accent: #00f0ff; /* Cyan Neon */
+  --accent-glow: rgba(0, 240, 255, 0.4);
+  --purple: #b026ff;
+  --purple-glow: rgba(176, 38, 255, 0.4);
+  --text: #e2e8f0;
+  --text-muted: #94a3b8;
+  --glass-bg: rgba(18, 26, 47, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --error: #ff4757;
+  --success: #2ed573;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', 'Outfit', sans-serif;
+}
+
+body {
+  background-color: var(--primary);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+/* Background Animated Gradients */
+.background-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  background: radial-gradient(circle at 15% 50%, rgba(0, 240, 255, 0.08), transparent 25%),
+              radial-gradient(circle at 85% 30%, rgba(176, 38, 255, 0.08), transparent 25%);
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+.neon-text {
+  color: #fff;
+  text-shadow: 0 0 5px var(--accent-glow), 0 0 10px var(--accent-glow), 0 0 20px var(--accent);
+}
+
+.neon-text-purple {
+  color: #fff;
+  text-shadow: 0 0 5px var(--purple-glow), 0 0 10px var(--purple-glow), 0 0 20px var(--purple);
+}
+
+.btn {
+  background: transparent;
+  color: var(--accent);
+  border: 2px solid var(--accent);
+  padding: 10px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.btn:hover {
+  background: var(--accent);
+  color: var(--primary);
+  box-shadow: 0 0 15px var(--accent-glow);
+}
+
+.btn-purple {
+  color: var(--purple);
+  border-color: var(--purple);
+}
+
+.btn-purple:hover {
+  background: var(--purple);
+  color: var(--primary);
+  box-shadow: 0 0 15px var(--purple-glow);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--primary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--secondary);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* Typography Helpers */
+.title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+}
