@@ -178,16 +178,25 @@ const TypingEngine = ({ timeLimit = 60 }) => {
 
       {isFinished && (
         <motion.div 
-          className="result-overlay glass-card"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          className="result-overlay"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ type: "spring", bounce: 0.4 }}
         >
           <h2 className="neon-text">Test Complete!</h2>
           <div className="final-stats">
-            <p>Speed: {wpm} WPM</p>
-            <p>Accuracy: {accuracy}%</p>
+            <div className="final-stat-item">
+              <span className="final-stat-label">Speed</span>
+              <span className="final-stat-value neon-text">{wpm} WPM</span>
+            </div>
+            <div className="final-stat-item">
+              <span className="final-stat-label">Accuracy</span>
+              <span className="final-stat-value neon-text-purple">{accuracy}%</span>
+            </div>
           </div>
-          <button className="btn btn-purple" onClick={resetTest}>Try Again</button>
+          <button className="btn btn-purple" style={{ fontSize: '1.2rem', padding: '12px 30px' }} onClick={resetTest}>
+            Try Again
+          </button>
         </motion.div>
       )}
     </div>
