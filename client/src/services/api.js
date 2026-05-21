@@ -1,6 +1,9 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+// Automatically use the current hostname (IP address) for the backend URL so it works on other laptops
+const API_URL = import.meta.env.VITE_API_URL && !import.meta.env.VITE_API_URL.includes('localhost')
+  ? import.meta.env.VITE_API_URL 
+  : `http://${window.location.hostname}:5000/api`;
 
 const api = axios.create({
   baseURL: API_URL,
