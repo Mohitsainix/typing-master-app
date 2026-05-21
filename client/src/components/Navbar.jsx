@@ -1,10 +1,20 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Keyboard, Trophy, User, LogIn } from 'lucide-react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Keyboard, Trophy, User, LogIn, LogOut } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { authService } from '../services/api';
 import './Navbar.css';
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const location = useLocation(); // To force re-render on navigation
+  const userInfo = localStorage.getItem('userInfo');
+
+  const handleLogout = () => {
+    authService.logout();
+    navigate('/login');
+  };
+
   return (
     <motion.nav 
       className="navbar glass-card"
@@ -27,10 +37,17 @@ const Navbar = () => {
           <User size={18} />
           <span>Profile</span>
         </Link>
-        <Link to="/login" className="btn">
-          <LogIn size={18} style={{ marginRight: '8px', verticalAlign: 'middle' }} />
-          Login
-        </Link>
+        {userInfo ? (
+          <button onClick={handleLogout} className="btn" style={{ background: 'transparent' }}>
+            <LogOut size={18} style={{ marginRight: '8px', verticalAlign: 'middle' }} />
+            Logout
+          </button>
+        ) : (
+          <Link to="/login" className="btn">
+            <LogIn size={18} style={{ marginRight: '8px', verticalAlign: 'middle' }} />
+            Login
+          </Link>
+        )}
       </div>
     </motion.nav>
   );

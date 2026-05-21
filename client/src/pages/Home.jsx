@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import TypingEngine from '../components/TypingEngine';
 
 const Home = () => {
+  const [timeLimit, setTimeLimit] = useState(60);
+
   return (
     <motion.div 
       className="home-container"
@@ -15,14 +17,19 @@ const Home = () => {
         <p className="subtitle">Compete, level up, and become the ultimate Typist.</p>
         
         <div className="mode-selector" style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginBottom: '40px' }}>
-          <button className="btn">15s</button>
-          <button className="btn">30s</button>
-          <button className="btn btn-purple">60s</button>
-          <button className="btn">120s</button>
+          {[15, 30, 60, 120].map(time => (
+            <button 
+              key={time} 
+              className={`btn ${timeLimit === time ? 'btn-purple' : ''}`}
+              onClick={() => setTimeLimit(time)}
+            >
+              {time}s
+            </button>
+          ))}
         </div>
       </div>
 
-      <TypingEngine />
+      <TypingEngine timeLimit={timeLimit} />
     </motion.div>
   );
 };
