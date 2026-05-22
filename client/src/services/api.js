@@ -78,6 +78,13 @@ export const authService = {
   getProfile: async () => {
     const response = await api.get('/auth/profile');
     return response.data;
+  },
+  updateProfile: async (profileData) => {
+    const response = await api.put('/auth/profile', profileData);
+    if (response.data) {
+      localStorage.setItem('userInfo', JSON.stringify(response.data));
+    }
+    return response.data;
   }
 };
 
