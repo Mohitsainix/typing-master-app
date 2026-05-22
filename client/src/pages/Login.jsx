@@ -27,7 +27,9 @@ const Login = () => {
       }
       navigate('/dashboard');
     } catch (err) {
-      setError(err.response?.data?.message || 'An error occurred. Please try again.');
+      console.error('Auth error full details:', err);
+      // Show the exact raw network error if the backend response is missing
+      setError(err.response?.data?.message || err.message || 'An error occurred. Please try again.');
     } finally {
       setLoading(false);
     }
