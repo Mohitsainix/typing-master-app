@@ -20,6 +20,7 @@ const Login = () => {
     setError('');
 
     try {
+      setError('');
       if (isLogin) {
         await authService.login(formData.email, formData.password);
       } else {
@@ -28,8 +29,12 @@ const Login = () => {
       navigate('/dashboard');
     } catch (err) {
       console.error('Auth error full details:', err);
-      // Show the exact raw network error if the backend response is missing
-      setError(err.response?.data?.message || err.message || 'An error occurred. Please try again.');
+      if (!err.response) {
+        // Network error = server was sleeping, auto-retry already happened
+        setError('⚡ Server is starting up (free tier). Please wait 30 seconds and try again.');
+      } else {
+        setError(err.response?.data?.message || err.message || 'An error occurred. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
