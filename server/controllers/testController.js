@@ -23,21 +23,25 @@ const saveTestScore = asyncHandler(async (req, res) => {
     duration,
   });
 
-  // Update user stats
+  // Update user stats with fallbacks for undefined/NaN values
   const user = await User.findById(req.user._id);
   
-  const totalTests = user.totalTests + 1;
-  const newHighestWPM = Math.max(user.highestWPM, wpm);
+  const currentTotalTests = user.totalTests || 0;
+  const currentHighestWPM = user.highestWPM || 0;
+  const currentAverageWPM = user.averageWPM || 0;
+  
+  const totalTests = currentTotalTests + 1;
+  const newHighestWPM = Math.max(currentHighestWPM, wpm);
   
   // Calculate new average WPM
-  const newAverageWPM = Math.round(((user.averageWPM * user.totalTests) + wpm) / totalTests);
+  const newAverageWPM = Math.round(((currentAverageWPM * currentTotalTests) + wpm) / totalTests);
 
   user.totalTests = totalTests;
   user.highestWPM = newHighestWPM;
   user.averageWPM = newAverageWPM;
   
-  // Basic streak logic (just increment for now if they play)
-  user.streak += 1; 
+  // Basic streak logic
+  user.streak = (user.streak || 0) + 1; 
 
   await user.save();
 
