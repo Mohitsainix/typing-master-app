@@ -1,9 +1,8 @@
 import axios from 'axios';
 
-// Automatically use the current hostname (IP address) for the backend URL so it works on other laptops
-const API_URL = import.meta.env.VITE_API_URL && !import.meta.env.VITE_API_URL.includes('localhost')
-  ? import.meta.env.VITE_API_URL 
-  : `http://${window.location.hostname}:5000/api`;
+// Use the VITE_API_URL env var in production (Render/Vercel deployment)
+// Fallback: hardcoded local IP so every device on the same WiFi can connect
+const API_URL = import.meta.env.VITE_API_URL || 'http://172.20.10.2:5000/api';
 
 const api = axios.create({
   baseURL: API_URL,
