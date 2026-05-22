@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// Use VITE_API_URL in production (Render), fallback for local dev
-const API_URL = import.meta.env.VITE_API_URL || 'http://172.20.10.2:5000/api';
+// HARDCODED to bypass any misconfigured Vercel environment variables
+const API_URL = 'https://typing-master-app.onrender.com/api';
 
 const api = axios.create({
   baseURL: API_URL,
